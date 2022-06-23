@@ -4,7 +4,7 @@
 
 ## Requirements
 
-* [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+* [WebApp link](https://slack-copy.herokuapp.com/)
 
 ## Install
 
