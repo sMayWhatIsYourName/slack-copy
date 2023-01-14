@@ -11,7 +11,7 @@ export default {
       password: 'Пароль',
       confirmPassword: 'Подтвердите пароль',
     },
-    chatForm: {
+    chatForm: { // для склонения числительных
       message_zero: '{{count}} сообщений',
       message_one: '{{count}} сообщение',
       message_few: '{{count}} сообщения',
@@ -25,7 +25,7 @@ export default {
       register: 'Зарегистрироваться',
       send: 'Отправить',
     },
-    errors: {
+    errors: { // ошибки
       auth: 'Неверные имя пользователя или пароль',
       confirmPassword: 'Пароли должны совпадать',
       password: 'Не менее 6 символов',

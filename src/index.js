@@ -11,9 +11,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const renderApp = () => {
-  const vDom = init();
+  const vDom = init(); // инициализация приложения
 
-  ReactDOM.render(vDom, document.getElementById('chat'));
+  ReactDOM.render(vDom, document.getElementById('chat')); // рендерим результат инициализации в элемент с id 'chat'
 };
 
 renderApp();

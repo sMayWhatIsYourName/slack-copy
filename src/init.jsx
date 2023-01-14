@@ -16,48 +16,47 @@ import { actions as channelsActions } from './slices/channelsSlice.js';
 import resources from './locales/index.js';
 
 const initApp = () => {
-  const socket = io();
+  const socket = io(); // инициализируем объект сокета
 
-  i18next
-    .use(initReactI18next)
+  i18next // инициализируем интернационализацию
+    .use(initReactI18next) // используем реактовскую интернациолизацию
     .init({
-      lng: 'ru',
-      resources,
+      lng: 'ru', // ставим русский язык
+      resources, // вставляем импортированный словарь
     });
 
-  const { t } = i18next;
+  const { t } = i18next; // эта функция переводит текст
 
-  socket.on('newMessage', (msg) => {
-    store.dispatch(messagesActions.addMessage(msg));
+  socket.on('newMessage', (msg) => { // создаем функцию-обработчик на отправку сообщения
+    store.dispatch(messagesActions.addMessage(msg)); // добавляем наше сообщение во внутреннее хранилище
   });
 
-  socket.on('newChannel', (msg) => {
-    store.dispatch(channelsActions.addChannel(msg));
-    toast.success(t('success.create'));
+  socket.on('newChannel', (msg) => { // создаем функцию-обработчик на создание канала
+    store.dispatch(channelsActions.addChannel(msg)); // добавляем наш канал во внутреннее хранилище
+    toast.success(t('success.create')); // уведомляем об успешном создании канала
   });
 
-  socket.on('removeChannel', ({ id }) => {
-    store.dispatch(channelsActions.removeChannel(id));
-    toast.success(t('success.remove'));
+  socket.on('removeChannel', ({ id }) => { // создаем функцию-обработчик на удаление канала
+    store.dispatch(channelsActions.removeChannel(id)); // удаляем наш канал из внутреннего хранилища
+    toast.success(t('success.remove')); // уведомляем об успешном удалении канала
   });
 
-  socket.on('renameChannel', (msg) => {
-    const { id, name } = msg;
-    const newObj = {
+  socket.on('renameChannel', ({ id, name }) => { // создаем функцию-обработчик на изменение канал
+    const newObj = { // создаем объект канала, который потом отправим во внутреннее хранилище
       id,
       changes: {
         name,
       },
     };
-    store.dispatch(channelsActions.renameChannel(newObj));
-    toast.success(t('success.rename'));
+    store.dispatch(channelsActions.renameChannel(newObj)); // переименовываем наш канал
+    toast.success(t('success.rename')); // уведомляем об успешном переименовании канала
   });
 
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <App socket={socket} />
-        <ToastContainer
+    <Provider store={store}> {/* проводим наше хранилище */}
+      <BrowserRouter> {/* проводим наш роутер для перехода по страницам */}
+        <App socket={socket} /> {/* рендерим наше приложение */}
+        <ToastContainer // проводим контейнер для уведомлений пользователя
           position="top-right"
           autoClose={5000}
           hideProgressBar={false}
