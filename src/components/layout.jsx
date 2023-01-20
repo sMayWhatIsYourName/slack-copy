@@ -1,19 +1,7 @@
 import { Outlet } from 'react-router-dom';
-import { Navbar, Container, Button } from 'react-bootstrap';
+import { Navbar, Container } from 'react-bootstrap';
 import React from 'react';
-import { useAuth } from '../hooks/index.js';
-
-function ExitButton({ children }) {
-  const auth = useAuth();
-  const userId = JSON.parse(localStorage.getItem('userId'));
-  if ((auth.loggedIn || userId) && userId.token) {
-    return (
-      <Button onClick={auth.logOut}>{children}</Button>
-    );
-  }
-
-  return null;
-}
+import ExitButton from './ExitButton.jsx';
 
 function Layout() {
   return (

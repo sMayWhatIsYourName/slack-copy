@@ -1,3 +1,3 @@
 import ru from './ru.js';
 
-export default { ru };
+export default { ru }; // Экспортируем наш словарь с русским языком

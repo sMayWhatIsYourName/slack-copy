@@ -1,6 +1,6 @@
 import React from 'react';
 
-function NotFoundPage() {
+function NotFoundPage() { // Компонент, который выводится если страница не была найдена
   return (
     <div className="text-center">
       <h1 className="h4 text-muted">Страница не найдена</h1>
