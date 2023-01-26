@@ -28,7 +28,8 @@ const initApp = () => {
   const { t } = i18next; // эта функция переводит текст
 
   socket.on('newMessage', (msg) => { // создаем функцию-обработчик на отправку сообщения
-    store.dispatch(messagesActions.addMessage(msg)); // добавляем наше сообщение во внутреннее хранилище
+    store.dispatch(messagesActions.addMessage(msg));
+    // добавляем наше сообщение во внутреннее хранилище
   });
 
   socket.on('newChannel', (msg) => { // создаем функцию-обработчик на создание канала
@@ -53,9 +54,12 @@ const initApp = () => {
   });
 
   return (
-    <Provider store={store}> {/* проводим наше хранилище */}
-      <BrowserRouter> {/* проводим наш роутер для перехода по страницам */}
-        <App socket={socket} /> {/* рендерим наше приложение */}
+    <Provider store={store}>
+      {/* проводим наше хранилище */}
+      <BrowserRouter>
+        {/* проводим наш роутер для перехода по страницам */}
+        <App socket={socket} />
+        {/* рендерим наше приложение */}
         <ToastContainer // проводим контейнер для уведомлений пользователя
           position="top-right"
           autoClose={5000}

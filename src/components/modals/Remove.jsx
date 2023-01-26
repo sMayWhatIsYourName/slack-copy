@@ -1,13 +1,13 @@
 import React, { useRef } from 'react';
 import { Modal, FormGroup } from 'react-bootstrap';
-
 import successCheck from '../../utils/successCheck.js';
+
 import { useSocket } from '../../hooks/index.js';
 
 const generateOnSubmit = ({ modalInfo: { item }, onHide }, socket, buttonRef) => (e) => {
-  buttonRef.current.setAttribute('disabled', '');
   e.preventDefault();
-  socket.emit('removeChannel', { id: item }, successCheck(buttonRef));
+  buttonRef.current.setAttribute('disabled', '');
+  socket.emit('removeChannel', { id: item }, successCheck(buttonRef)); // регистрируем событие сокета на удаление канала (передаем туда id канала)
   onHide();
 };
 
@@ -16,6 +16,8 @@ function Remove(props) {
   const socket = useSocket();
   const buttonRef = useRef();
   const onSubmit = generateOnSubmit(props, socket, buttonRef);
+  // вызываем функцию и замыкаем в ней props, socket и buttonRef
+  // в ответ получаем другую функцию, которую мы передаем на submit формы
 
   return (
     <Modal show>

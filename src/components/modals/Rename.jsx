@@ -6,12 +6,11 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import isUniqueChannelName from '../../utils/isUniqueChannelName.js';
-import successCheck from '../../utils/successCheck.js';
 import { useSocket } from '../../hooks/index.js';
 
 const generateOnSubmit = (onHide, id, socket, name, buttonRef) => {
   buttonRef.current.setAttribute('disabled', '');
-  socket.emit('renameChannel', { id, name }, successCheck(buttonRef));
+  socket.emit('renameChannel', { id, name }); // регистрируем событие сокета на изменение канала (передаем туда название канала и id)
   onHide();
 };
 
@@ -19,11 +18,13 @@ function Rename(props) {
   const { t } = useTranslation();
   const socket = useSocket();
   const { onHide, modalInfo: { item: { id, name: prevName } }, channels } = props;
+  // берем из пропсов функцию для закрытия модалки, каналы для проверки на уникальность
+  // И информацию о модалке (предыдущее имя и id)
   const inputRef = useRef();
   const buttonRef = useRef();
 
   useEffect(() => {
-    inputRef.current.select();
+    inputRef.current.focus();
   }, []);
 
   const feedbackStyle = {
