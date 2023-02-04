@@ -5,18 +5,18 @@ import {
 
 import fetchData from './dataSlice.js';
 
-const messagesAdapter = createEntityAdapter();
-const messagesSlice = createSlice({
-  name: 'messages',
-  initialState: messagesAdapter.getInitialState(),
+const messagesAdapter = createEntityAdapter(); // Создаем адаптер для работы с CRUD операциями
+const messagesSlice = createSlice({ // Создаем сущность сообщений
+  name: 'messages', // Задаем название сообщений
+  initialState: messagesAdapter.getInitialState(), // Инициализируем состояние
   reducers: {
-    addMessage: messagesAdapter.addOne,
+    addMessage: messagesAdapter.addOne, // Действие добавления сообщения
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchData.fulfilled, (state, action) => {
+      .addCase(fetchData.fulfilled, (state, action) => { // Обработка успешного выполнения запроса
         const { messages } = action.payload;
-        messagesAdapter.addMany(state, messages);
+        messagesAdapter.addMany(state, messages); // Добавление всех сообщений, пришедших с сервера
       });
   },
 });

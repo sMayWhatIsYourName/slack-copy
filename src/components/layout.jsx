@@ -3,7 +3,7 @@ import { Navbar, Container } from 'react-bootstrap';
 import React from 'react';
 import ExitButton from './ExitButton.jsx';
 
-function Layout() {
+function Layout() { // Этот компонент оборачивает в себе повторяющуюся верстку
   return (
     <div className="d-flex flex-column h-100">
       <Navbar className="shadow-sm" expand="lg" variant="light" bg="white">
