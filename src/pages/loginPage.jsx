@@ -9,18 +9,18 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../hooks/index.js';
 
 const routes = {
-  loginPath: () => '/api/v1/login',
+  loginPath: () => '/api/v1/login', // путь для авторизации
 };
 
 function LoginPage() {
-  const { t } = useTranslation();
-  const inputEl = useRef();
-  const navigate = useNavigate();
-  const auth = useAuth();
-  const { logIn } = auth;
+  const { t } = useTranslation(); // берем функцию для перевода
+  const inputEl = useRef(); // создаем ref для автофокуса на поле
+  const navigate = useNavigate(); // берем функцию роутинга
+  const auth = useAuth(); // берем инфу о нашей сессии
+  const { logIn } = auth; // берем функцию из контекста для авторизации
 
   useEffect(() => {
-    inputEl.current.focus();
+    inputEl.current.focus(); // автофокус при инициализации компонента
   }, []);
 
   return (
@@ -34,35 +34,35 @@ function LoginPage() {
               </div>
               <Formik
                 onSubmit={async (values, actions) => {
+                  // actions - объект с функциями для взаимодействия с полями
                   try {
-                    const { data: { token, username } } = await axios.post(
-                      routes.loginPath(),
+                    const { data: { token, username } } = await axios.post( // делаем асинхронный запрос на авторизацию на сервер
+                      routes.loginPath(), // по этому пути
                       values,
                       {
-                        timeout: 10000,
-                        timeoutErrorMessage: 'Network Error',
+                        timeout: 10000, // если через 10 секунд нам не придет ответ - выводим ошибку ниже
+                        timeoutErrorMessage: 'Network Error', // эту
                       },
                     );
-                    const storage = { token };
-                    const userName = { username };
-                    localStorage.setItem('userId', JSON.stringify(storage));
-                    localStorage.setItem('userName', JSON.stringify(userName));
-                    logIn();
-                    navigate('/');
+                    const storage = { token }; 
+                    const userName = { username }; 
+                    localStorage.setItem('userId', JSON.stringify(storage)); // обновляем токен
+                    localStorage.setItem('userName', JSON.stringify(userName)); // обновляем юзернейм
+                    logIn(); // авторизируем пользователя
+                    navigate('/'); // отправляем на главный путь (страница чата)
                   } catch (err) {
-                    if (err.response.status === 401) {
-                      actions.setFieldError('username', t('errors.auth'));
-                      actions.setFieldError('password', t('errors.auth'));
+                    if (err.response.status === 401) { // 401 - ошибка связанная с авторизацией
+                      actions.setFieldError('username', t('errors.auth')); // говорим нашим полям о том, что они ошибочные и передаем туда строку из локализации
+                      actions.setFieldError('password', t('errors.auth')); // говорим нашим полям о том, что они ошибочные и передаем туда строку из локализации
                       return;
-                    }
-                    if (err.message === 'Network Error') {
+                    } else if (err.message === 'Network Error') { // если ошибка связана с работой с сетью - уведомляем о ней
                       toast.error(t('errors.network'));
                       return;
                     }
                     throw err;
                   }
                 }}
-                initialValues={{
+                initialValues={{ // стартовые значения
                   username: '',
                   password: '',
                 }}
@@ -73,19 +73,19 @@ function LoginPage() {
                   values,
                   errors,
                 }) => (
-                  <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={handleSubmit}>
+                  <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={handleSubmit}> { /* отправка формы */ }
                     <h1 className="text-center mb-4">{t('loginForm.headling')}</h1>
                     <Form.Floating className="mb-3">
                       <Form.Control
                         id="username"
                         name="username"
-                        placeholder={t('loginForm.username')}
-                        required
+                        placeholder={t('loginForm.username')} /* текст из локализации будет выведен если значение не введено */
+                        required // делаем поле обязательным
                         autoComplete="username"
-                        onChange={handleChange}
-                        value={values.username}
-                        ref={inputEl}
-                        isInvalid={!!errors.username}
+                        onChange={handleChange} // на изменение вызываем функцию handleChange
+                        value={values.username} // введенные значения юзеренйма
+                        ref={inputEl} // реф для автофокуса
+                        isInvalid={!!errors.username} /* проверка поля на валидность */
                       />
                       <label htmlFor="username">{t('loginForm.username')}</label>
                     </Form.Floating>
@@ -99,7 +99,7 @@ function LoginPage() {
                         autoComplete="current-password"
                         onChange={handleChange}
                         value={values.password}
-                        isInvalid={!!errors.password}
+                        isInvalid={!!errors.password} 
                       />
                       <label htmlFor="password">{t('loginForm.password')}</label>
                       <Form.Control.Feedback type="invalid" tooltip>

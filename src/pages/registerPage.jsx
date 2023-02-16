@@ -10,17 +10,17 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../hooks/index.js';
 
 const routes = {
-  registerPath: () => '/api/v1/signup',
+  registerPath: () => '/api/v1/signup', // путь для регистрации
 };
 
 function RegisterPage() {
   const { t } = useTranslation();
 
-  const schema = yup.object().shape({
-    username: yup.string().trim().required(t('errors.required')).min(3, t('errors.username'))
+  const schema = yup.object().shape({ // объект валидации
+    username: yup.string().trim().required(t('errors.required')).min(3, t('errors.username')) // задаем то, что поле username должно быть строчным, удаляем пробелы с конца и начала, в случае чего покажет то, что поле обязательно, а также если будет менее 3 символом покажет ошибку
       .max(20, t('errors.username')),
-    password: yup.string().required('').min(6, t('errors.password')),
-    confirmPassword: yup.string()
+    password: yup.string().required(t('errors.required')).min(6, t('errors.password')), // тоже самое, что и username, но если меньше 6 символов покажет ошибку
+    confirmPassword: yup.string().required(t('errors.required')) // строчное, обязательное и должно быть таким же как password
       .oneOf(
         [yup.ref('password'), null],
         t('errors.confirmPassword'),
@@ -46,9 +46,10 @@ function RegisterPage() {
               <Formik
                 validationSchema={schema}
                 onSubmit={async (values, actions) => {
+                  console.log(values);
                   try {
-                    const { data: { token, username } } = await axios.post(
-                      routes.registerPath(),
+                    const { data: { token, username } } = await axios.post( // запрос на регистрацию
+                      routes.registerPath(), // по пути регистрации
                       values,
                       {
                         timeout: 10000,
@@ -62,7 +63,7 @@ function RegisterPage() {
                     logIn();
                     navigate('/');
                   } catch (err) {
-                    if (err.response.status === 409) {
+                    if (err.response.status === 409) { // обработка ошибки когда аккаунт, который мы пытаемся зарегистрировать уже существует
                       actions.setFieldError('username', t('errors.exist'));
                       return;
                     }
@@ -84,9 +85,9 @@ function RegisterPage() {
                   handleChange,
                   handleBlur,
                   values,
-                  errors,
+                  errors, // объект, в котором лежат невалидные поля и строковое представление ошибок
                 }) => (
-                  <Form className="col-12 col-md-6 mt-3 mt-mb-0" noValidate onSubmit={handleSubmit}>
+                  <Form className="col-12 col-md-6 mt-3 mt-mb-0" noValidate onSubmit={handleSubmit}> { /* отправка формы */ }
                     <h1 className="text-center mb-4">{t('registrationForm.headling')}</h1>
                     <Form.Floating className="mb-3">
                       <Form.Control
@@ -96,7 +97,7 @@ function RegisterPage() {
                         required
                         autoComplete="username"
                         onChange={handleChange}
-                        onBlur={handleBlur}
+                        onBlur={handleBlur} // вызывается когда наше поле было тронуто хотя бы 1 раз
                         value={values.username}
                         ref={inputEl}
                         isInvalid={!!errors.username}
@@ -116,7 +117,7 @@ function RegisterPage() {
                         aria-describedby="passwordHelpBlock"
                         autoComplete="new-password"
                         onChange={handleChange}
-                        onBlur={handleBlur}
+                        onBlur={handleBlur} // вызывается когда наше поле было тронуто хотя бы 1 раз
                         value={values.password}
                         isInvalid={!!errors.password}
                       />
@@ -134,7 +135,7 @@ function RegisterPage() {
                         type="password"
                         autoComplete="new-password"
                         onChange={handleChange}
-                        onBlur={handleBlur}
+                        onBlur={handleBlur} // вызывается когда наше поле было тронуто хотя бы 1 раз
                         value={values.confirmPassword}
                         isInvalid={!!errors.confirmPassword}
                       />
@@ -143,7 +144,7 @@ function RegisterPage() {
                         {errors.confirmPassword}
                       </Form.Control.Feedback>
                     </Form.Floating>
-                    <Button className="w-100" variant="outline-primary" type="submit">{t('buttons.register')}</Button>
+                    <Button className="w-100" variant="outline-primary" type="submit">{t('buttons.register')}</Button> { /* регистрация */ }
                   </Form>
                 )}
               </Formik>
