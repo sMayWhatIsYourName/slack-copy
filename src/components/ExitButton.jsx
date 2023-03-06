@@ -4,7 +4,6 @@ import { useAuth } from '../hooks/index.js';
 
 function ExitButton({ children }) { // Берем из пропсов children (это содержимое нашего тэга)
   const auth = useAuth(); // Вызываем хук авторизации
-  console.log(auth);
   const userId = JSON.parse(localStorage.getItem('userId')); // Получаем значение userId из localStorage
   if ((auth.loggedIn || userId) && userId.token) { // ( Если пользователь залогинен
     // или у него есть userId ) и у него есть токен, то показываем кнопку ВЫЙТИ.

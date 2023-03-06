@@ -8,7 +8,7 @@ import fastifySocketIo from 'fastify-socket.io';
 import fastifyStatic from 'fastify-static';
 import fastifyJWT from 'fastify-jwt';
 import HttpErrors from 'http-errors';
-
+// fastify - библиотека для написания backend
 import addRoutes from './routes.js';
 
 const { Unauthorized } = HttpErrors;
@@ -46,7 +46,7 @@ const setUpStaticAssets = (app) => {
 const setUpAuth = (app) => {
   // TODO add socket auth
   app
-    .register(fastifyJWT, {
+    .register(fastifyJWT, { // делаем авторизацию с помощью jwt 
       secret: 'supersecret',
     })
     .decorate('authenticate', async (req, reply) => {
@@ -58,12 +58,16 @@ const setUpAuth = (app) => {
     });
 };
 
-export default async (app, options) => {
+export default async (app, options) => { // app - какой-то fastify объект
   setUpAuth(app);
   setUpViews(app);
   setUpStaticAssets(app);
-  await app.register(fastifySocketIo);
-  addRoutes(app, options?.state || {});
+  await app.register(fastifySocketIo); // регистрируем на наше приложение socket
+  const users = [{ id: 101, username: 'sultan', password: 'sultan' }];
+  const defaultState = {
+    users
+  };
+  addRoutes(app, defaultState); // вызываем функцию для создания путей/событий для запросов
 
   return app;
 };
